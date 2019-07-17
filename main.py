@@ -80,7 +80,7 @@ def peak_profile(image, peaks):
 
 imag = Image.open("800,800.bmp")
 # imag = Image.open("test.bmp")
-imag.show()
+#imag.show()
 
 im = np.asarray(imag)
 print(im[176,213])
