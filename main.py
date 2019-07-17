@@ -3,7 +3,7 @@
 # Peak Detection on monochrome pictures
 #
 # Author: Matheus J. Castro
-# Year: 2019
+# Created on Jul 2019
 #
 ##################################
 
