@@ -55,35 +55,41 @@ def rescale_array(peak1, data):
 
 
 def peak_profile(image, peaks):
-    linha = peaks[0, 0]
+    linha = peaks[0, 1]
+    # linha = 277 #escolha da linha de perfil manual
     lista = np.zeros(image.shape[0])
     tamanho = 0
 
     for i in range(len(lista)):
-        lista[i] = image[i, int(linha)]
+        lista[i] = image[int(linha), i]
 
+    no_peak = True
     for i in range(peaks.shape[0]):
-        if peaks[i, 0] == linha:
+        if peaks[i, 1] == linha:
             tamanho += 1
-    peak_y = np.zeros(tamanho)
-    peak_x = np.zeros(tamanho)
+            no_peak = False
 
+    if no_peak:
+        return np.zeros(image.shape[0]), 0, [0, 0], [0, 0]
+
+    peak_x = np.zeros(tamanho)
+    peak_y = np.zeros(tamanho)
+
+    count = 0
     for i in range(peaks.shape[0]):
-        if peaks[i, 0] == linha:
-            peak_x[i] = peaks[i, 1]
-            print(int(linha), int(peak_x[i]))
-            peak_y[i] = image[int(peak_x[i]), int(linha)]
-    print(peak_x, peak_y)
+        if peaks[i, 1] == linha:
+            peak_x[count] = peaks[i, 0]
+            peak_y[count] = image[int(linha), int(peak_x[count])]
+            count += 1
 
     return lista, linha, peak_x, peak_y
 
 
-imag = Image.open("800,800.bmp")
-# imag = Image.open("test.bmp")
-#imag.show()
+# imag = Image.open("800,800.bmp")
+imag = Image.open("test.bmp")
+# imag.show()
 
 im = np.asarray(imag)
-print(im[176,213])
 
 peak_list, peak_array = peak_detection(im, half_window=10, threshold=10)
 peak_xy = rescale_array(peak_list, im)
@@ -97,21 +103,27 @@ perfil, line, peak_perfil_x, peak_perfil_y = peak_profile(im, peak_xy)
 
 plt.figure(figsize=(15, 4))
 plt.subplot(131)
-#plt.xlim(170,180)
-#plt.ylim(215,210)
 plt.title("Matriz da Imagem")
+plt.xlabel("Pixel")
+plt.ylabel("Pixel")
 plt.imshow(im)
 
 plt.subplot(132)
 plt.xlim(0, 300)
 plt.ylim(300, 0)
 plt.title("Matriz de Detecção de Pico")
-plt.xlabel("Pico em: {}".format(peak_xy))
+plt.xlabel("Pixel")
+plt.ylabel("Pixel")
+#plt.xlabel("Pico em: {}".format(peak_xy))
 plt.imshow(peak_array)
 
 plt.subplot(133)
 plt.title("Perfil na Linha {} (pico)".format(line))
+plt.xlabel("Posição x na matriz")
+plt.ylabel("Counts")
 plt.plot(np.arange(0, im.shape[0]), perfil)
-plt.plot(peak_perfil_x, peak_perfil_y, ".", linewidth=5)
-
+plt.plot(peak_perfil_x, peak_perfil_y, " ", marker="o", markersize=5)
+plt.annotate("Pico: {}".format(peak_xy[0]), xy=(peak_perfil_x[0], peak_perfil_y[0]), arrowprops=dict(arrowstyle='->'),
+             xytext=(150, 150))
+plt.savefig("plot.png", format='png')
 plt.show()
