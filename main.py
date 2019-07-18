@@ -1,11 +1,11 @@
-##################################
-# Detectção de Picos em imagens monocromáticas
-# Peak Detection on monochrome pictures
-#
-# Author: Matheus J. Castro
-# Created on Jul 2019
-#
-##################################
+#########################################################
+# Detectção de Picos em imagens monocromáticas          #
+# Peak Detection on monochrome pictures                 #
+#                                                       #
+# Author: Matheus J. Castro                             #
+# Created on Jul 2019                                   #
+#                                                       #
+##########################################################
 
 import numpy as np
 import matplotlib.pyplot as plt
